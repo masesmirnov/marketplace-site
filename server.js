@@ -62,7 +62,9 @@ const TYPES = {
   '.js': 'text/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
-  '.py': 'text/plain; charset=utf-8'
+  '.py': 'text/plain; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
+  '.yml': 'text/plain; charset=utf-8'
 };
 
 const SECURITY = {
@@ -91,7 +93,7 @@ function collectAssets(directory, prefix = '') {
       for (const [key, value] of collectAssets(full, route)) found.set(key, value);
       continue;
     }
-    const type = TYPES[path.extname(entry.name)];
+    const type = entry.name === 'Dockerfile' ? TYPES['.txt'] : TYPES[path.extname(entry.name)];
     if (!type) continue;
     const body = fs.readFileSync(full);
     found.set(route, {

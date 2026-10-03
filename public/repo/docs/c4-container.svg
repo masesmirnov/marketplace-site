@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1516" height="1184" viewBox="0 0 1516 1184" role="img" aria-labelledby="title desc">
+<title id="title">Маркетплейс: диаграмма контейнеров C4</title>
+<desc id="desc">Покупатели и продавцы работают через веб-приложения и API Gateway с шестью сервисами: пользователи, лента, каталог, заказы, платежи и уведомления. У каждого сервиса своё хранилище, события идут через Kafka, оплата через внешнего платёжного провайдера, рассылки через внешние сервисы.</desc>
+<defs>
+<filter id="soft" x="-10%" y="-10%" width="120%" height="130%">
+<feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.08"/>
+</filter>
+<marker id="arrow-sync" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M0,1 L9,5 L0,9 Z" fill="#334155"/>
+</marker>
+<marker id="arrow-async" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto">
+<path d="M0,1 L9,5 L0,9 Z" fill="#2455d1"/>
+</marker>
+<style>
+text { font-family: Inter, 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; }
+.title { font-weight: 700; font-size: 22px; fill: #0f172a; }
+.subtitle { font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12px; fill: #64748b; }
+.container { fill: #ffffff; stroke: #2455d1; stroke-width: 1.6; }
+.external { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.4; }
+.person { fill: #eef3fd; stroke: #2455d1; stroke-width: 1.6; }
+.store { fill: #eef3fd; stroke: #2455d1; stroke-width: 1.4; }
+.boundary { fill: #f8fafc; stroke: #94a3b8; stroke-width: 1.3; stroke-dasharray: 7 5; }
+.name { font-weight: 600; font-size: 15px; fill: #0f172a; }
+.name-ext { font-weight: 600; font-size: 15px; fill: #475569; }
+.tech { font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10.5px; fill: #2455d1; }
+.tech-ext { font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10.5px; fill: #64748b; }
+.desc { font-size: 12.5px; fill: #334155; }
+.desc-ext { font-size: 12.5px; fill: #64748b; }
+.db-name { font-weight: 600; font-size: 13.5px; fill: #0f172a; }
+.db-desc { font-size: 11.5px; fill: #334155; }
+.rel { font-size: 11.5px; fill: #334155; }
+.rel-tech { font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10px; fill: #64748b; }
+.topic { font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10.5px; fill: #2455d1; }
+.halo { paint-order: stroke; stroke: #f8fafc; stroke-width: 4px; stroke-linejoin: round; }
+.halo-white { paint-order: stroke; stroke: #ffffff; stroke-width: 4px; stroke-linejoin: round; }
+.sync { fill: none; stroke: #334155; stroke-width: 1.4; }
+.async { fill: none; stroke: #2455d1; stroke-width: 1.4; stroke-dasharray: 6 4; }
+.boundary-name { font-weight: 700; font-size: 14px; fill: #475569; }
+.boundary-tech { font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; fill: #64748b; }
+.legend-title { font-weight: 700; font-size: 12.5px; fill: #0f172a; }
+.legend { font-size: 12px; fill: #334155; }
+</style>
+</defs>
+<rect x="0.5" y="0.5" width="1515" height="1183" rx="20" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="36.0" y="54.0" class="title" text-anchor="start">Маркетплейс — диаграмма контейнеров</text>
+<text x="36.0" y="78.0" class="subtitle" text-anchor="start">C4 · уровень 2 · Container</text>
+<rect x="36" y="244" width="1444" height="808" rx="18" class="boundary"/>
+<text x="58.0" y="1039.0" class="boundary-name" text-anchor="start">Маркетплейс</text>
+<text x="157.2" y="1039.0" class="boundary-tech" text-anchor="start">[Software System]</text>
+<rect x="388" y="132" width="236" height="84" rx="18" class="person" filter="url(#soft)"/>
+<circle cx="506" cy="118" r="20" class="person"/>
+<text x="506.0" y="160.0" class="name" text-anchor="middle">Продавец</text>
+<text x="506.0" y="177.0" class="tech" text-anchor="middle">[Person]</text>
+<text x="506.0" y="197.0" class="desc" text-anchor="middle">продаёт товары на маркетплейсе</text>
+<rect x="856" y="132" width="236" height="84" rx="18" class="person" filter="url(#soft)"/>
+<circle cx="974" cy="118" r="20" class="person"/>
+<text x="974.0" y="160.0" class="name" text-anchor="middle">Покупатель</text>
+<text x="974.0" y="177.0" class="tech" text-anchor="middle">[Person]</text>
+<text x="974.0" y="197.0" class="desc" text-anchor="middle">смотрит ленту и покупает товары</text>
+<rect x="59.0" y="112" width="210" height="104" rx="12" class="external" filter="url(#soft)"/>
+<text x="164.0" y="143.0" class="name-ext" text-anchor="middle">Сервисы рассылок</text>
+<text x="164.0" y="161.0" class="tech-ext" text-anchor="middle">[Software System]</text>
+<text x="164.0" y="182.0" class="desc-ext" text-anchor="middle">email, SMS и push</text>
+<rect x="1247.0" y="112" width="210" height="104" rx="12" class="external" filter="url(#soft)"/>
+<text x="1352.0" y="143.0" class="name-ext" text-anchor="middle">Платёжный провайдер</text>
+<text x="1352.0" y="161.0" class="tech-ext" text-anchor="middle">[Software System]</text>
+<text x="1352.0" y="182.0" class="desc-ext" text-anchor="middle">оплата картами и СБП,</text>
+<text x="1352.0" y="198.0" class="desc-ext" text-anchor="middle">возвраты и выплаты</text>
+<rect x="381" y="292" width="250" height="96" rx="12" class="container" filter="url(#soft)"/>
+<text x="506.0" y="323.0" class="name" text-anchor="middle">Кабинет продавца</text>
+<text x="506.0" y="341.0" class="tech" text-anchor="middle">[Container: React SPA]</text>
+<text x="506.0" y="362.0" class="desc" text-anchor="middle">товары, цены и остатки,</text>
+<text x="506.0" y="378.0" class="desc" text-anchor="middle">заказы покупателей</text>
+<rect x="849" y="292" width="250" height="96" rx="12" class="container" filter="url(#soft)"/>
+<text x="974.0" y="323.0" class="name" text-anchor="middle">Витрина</text>
+<text x="974.0" y="341.0" class="tech" text-anchor="middle">[Container: React SPA]</text>
+<text x="974.0" y="362.0" class="desc" text-anchor="middle">лента, карточки товаров,</text>
+<text x="974.0" y="378.0" class="desc" text-anchor="middle">корзина и заказы</text>
+<rect x="596" y="440" width="300" height="96" rx="12" class="container" filter="url(#soft)"/>
+<text x="746.0" y="471.0" class="name" text-anchor="middle">API Gateway</text>
+<text x="746.0" y="489.0" class="tech" text-anchor="middle">[Container: Envoy]</text>
+<text x="746.0" y="510.0" class="desc" text-anchor="middle">единая точка входа: маршруты,</text>
+<text x="746.0" y="526.0" class="desc" text-anchor="middle">проверка JWT, лимиты запросов</text>
+<rect x="64" y="640" width="200" height="112" rx="12" class="container" filter="url(#soft)"/>
+<text x="164.0" y="671.0" class="name" text-anchor="middle">Сервис уведомлений</text>
+<text x="164.0" y="689.0" class="tech" text-anchor="middle">[Container: Python, FastAPI]</text>
+<text x="164.0" y="710.0" class="desc" text-anchor="middle">письма, SMS и push</text>
+<text x="164.0" y="726.0" class="desc" text-anchor="middle">о статусах заказов</text>
+<rect x="292" y="640" width="200" height="112" rx="12" class="container" filter="url(#soft)"/>
+<text x="392.0" y="671.0" class="name" text-anchor="middle">Сервис пользователей</text>
+<text x="392.0" y="689.0" class="tech" text-anchor="middle">[Container: Python, FastAPI]</text>
+<text x="392.0" y="710.0" class="desc" text-anchor="middle">покупатели и продавцы:</text>
+<text x="392.0" y="726.0" class="desc" text-anchor="middle">вход, роли, выпуск JWT</text>
+<rect x="520" y="640" width="200" height="112" rx="12" class="container" filter="url(#soft)"/>
+<text x="620.0" y="671.0" class="name" text-anchor="middle">Сервис ленты</text>
+<text x="620.0" y="689.0" class="tech" text-anchor="middle">[Container: Python, FastAPI]</text>
+<text x="620.0" y="710.0" class="desc" text-anchor="middle">персональная выдача</text>
+<text x="620.0" y="726.0" class="desc" text-anchor="middle">товаров по интересам</text>
+<rect x="748" y="640" width="200" height="112" rx="12" class="container" filter="url(#soft)"/>
+<text x="848.0" y="671.0" class="name" text-anchor="middle">Сервис каталога</text>
+<text x="848.0" y="689.0" class="tech" text-anchor="middle">[Container: Python, FastAPI]</text>
+<text x="848.0" y="710.0" class="desc" text-anchor="middle">товары, цены, остатки;</text>
+<text x="848.0" y="726.0" class="desc" text-anchor="middle">их правит продавец</text>
+<rect x="1000" y="640" width="200" height="112" rx="12" class="container" filter="url(#soft)"/>
+<text x="1100.0" y="671.0" class="name" text-anchor="middle">Сервис заказов</text>
+<text x="1100.0" y="689.0" class="tech" text-anchor="middle">[Container: Python, FastAPI]</text>
+<text x="1100.0" y="710.0" class="desc" text-anchor="middle">корзина, оформление,</text>
+<text x="1100.0" y="726.0" class="desc" text-anchor="middle">статусы заказа</text>
+<rect x="1252" y="640" width="200" height="112" rx="12" class="container" filter="url(#soft)"/>
+<text x="1352.0" y="671.0" class="name" text-anchor="middle">Сервис платежей</text>
+<text x="1352.0" y="689.0" class="tech" text-anchor="middle">[Container: Python, FastAPI]</text>
+<text x="1352.0" y="710.0" class="desc" text-anchor="middle">оплата, возвраты, выплаты,</text>
+<text x="1352.0" y="726.0" class="desc" text-anchor="middle">учёт комиссий</text>
+<path d="M100,809 L100,891 A80.0,9 0 0 0 260,891 L260,809 A80.0,9 0 0 0 100,809 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="180.0" cy="809" rx="80.0" ry="9" class="store"/>
+<text x="180.0" y="839.0" class="db-name" text-anchor="middle">БД уведомлений</text>
+<text x="180.0" y="855.0" class="tech" text-anchor="middle">[Container: PostgreSQL]</text>
+<text x="180.0" y="873.0" class="db-desc" text-anchor="middle">контакты,</text>
+<text x="180.0" y="887.0" class="db-desc" text-anchor="middle">журнал отправок</text>
+<path d="M164,752 L164,799" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="171.0" y="772.0" class="rel halo" text-anchor="start">читает и пишет</text>
+<text x="171.0" y="786.0" class="rel-tech halo" text-anchor="start">[SQL]</text>
+<path d="M328,809 L328,891 A80.0,9 0 0 0 488,891 L488,809 A80.0,9 0 0 0 328,809 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="408.0" cy="809" rx="80.0" ry="9" class="store"/>
+<text x="408.0" y="839.0" class="db-name" text-anchor="middle">БД пользователей</text>
+<text x="408.0" y="855.0" class="tech" text-anchor="middle">[Container: PostgreSQL]</text>
+<text x="408.0" y="873.0" class="db-desc" text-anchor="middle">учётные записи,</text>
+<text x="408.0" y="887.0" class="db-desc" text-anchor="middle">профили, роли</text>
+<path d="M392,752 L392,799" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="399.0" y="772.0" class="rel halo" text-anchor="start">читает и пишет</text>
+<text x="399.0" y="786.0" class="rel-tech halo" text-anchor="start">[SQL]</text>
+<path d="M556,809 L556,891 A80.0,9 0 0 0 716,891 L716,809 A80.0,9 0 0 0 556,809 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="636.0" cy="809" rx="80.0" ry="9" class="store"/>
+<text x="636.0" y="839.0" class="db-name" text-anchor="middle">Хранилище ленты</text>
+<text x="636.0" y="855.0" class="tech" text-anchor="middle">[Container: Redis]</text>
+<text x="636.0" y="873.0" class="db-desc" text-anchor="middle">интересы покупателей,</text>
+<text x="636.0" y="887.0" class="db-desc" text-anchor="middle">готовые ленты</text>
+<path d="M620,752 L620,799" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="627.0" y="772.0" class="rel halo" text-anchor="start">читает и пишет</text>
+<text x="627.0" y="786.0" class="rel-tech halo" text-anchor="start">[Redis]</text>
+<path d="M784,809 L784,891 A80.0,9 0 0 0 944,891 L944,809 A80.0,9 0 0 0 784,809 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="864.0" cy="809" rx="80.0" ry="9" class="store"/>
+<text x="864.0" y="839.0" class="db-name" text-anchor="middle">БД каталога</text>
+<text x="864.0" y="855.0" class="tech" text-anchor="middle">[Container: PostgreSQL]</text>
+<text x="864.0" y="873.0" class="db-desc" text-anchor="middle">товары, категории,</text>
+<text x="864.0" y="887.0" class="db-desc" text-anchor="middle">цены, остатки</text>
+<path d="M848,752 L848,799" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="855.0" y="772.0" class="rel halo" text-anchor="start">читает и пишет</text>
+<text x="855.0" y="786.0" class="rel-tech halo" text-anchor="start">[SQL]</text>
+<path d="M1036,809 L1036,891 A80.0,9 0 0 0 1196,891 L1196,809 A80.0,9 0 0 0 1036,809 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="1116.0" cy="809" rx="80.0" ry="9" class="store"/>
+<text x="1116.0" y="839.0" class="db-name" text-anchor="middle">БД заказов</text>
+<text x="1116.0" y="855.0" class="tech" text-anchor="middle">[Container: PostgreSQL]</text>
+<text x="1116.0" y="873.0" class="db-desc" text-anchor="middle">заказы, позиции,</text>
+<text x="1116.0" y="887.0" class="db-desc" text-anchor="middle">история статусов</text>
+<path d="M1100,752 L1100,799" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="1107.0" y="772.0" class="rel halo" text-anchor="start">читает и пишет</text>
+<text x="1107.0" y="786.0" class="rel-tech halo" text-anchor="start">[SQL]</text>
+<path d="M1288,809 L1288,891 A80.0,9 0 0 0 1448,891 L1448,809 A80.0,9 0 0 0 1288,809 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="1368.0" cy="809" rx="80.0" ry="9" class="store"/>
+<text x="1368.0" y="839.0" class="db-name" text-anchor="middle">БД платежей</text>
+<text x="1368.0" y="855.0" class="tech" text-anchor="middle">[Container: PostgreSQL]</text>
+<text x="1368.0" y="873.0" class="db-desc" text-anchor="middle">платежи, возвраты,</text>
+<text x="1368.0" y="887.0" class="db-desc" text-anchor="middle">проводки</text>
+<path d="M1352,752 L1352,799" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="1359.0" y="772.0" class="rel halo" text-anchor="start">читает и пишет</text>
+<text x="1359.0" y="786.0" class="rel-tech halo" text-anchor="start">[SQL]</text>
+<path d="M80,952 L1436,952 A16,32.0 0 0 1 1436,1016 L80,1016 A16,32.0 0 0 1 80,952 Z" class="store" filter="url(#soft)"/>
+<ellipse cx="1436" cy="984.0" rx="16" ry="32.0" class="store"/>
+<text x="758.0" y="979.0" class="name" text-anchor="middle">Брокер событий</text>
+<text x="758.0" y="997.0" class="tech" text-anchor="middle">[Container: Apache Kafka]</text>
+<text x="758.0" y="1011.0" class="db-desc" text-anchor="middle">топики user.*, product.*, order.*, payment.*</text>
+<path d="M78,952 L78,753" class="async" marker-end="url(#arrow-async)"/>
+<text x="88.0" y="940.0" class="topic" text-anchor="start">читает order.*, user.*</text>
+<path d="M306,752 L306,951" class="async" marker-end="url(#arrow-async)"/>
+<text x="316.0" y="940.0" class="topic" text-anchor="start">публикует user.*</text>
+<path d="M534,952 L534,753" class="async" marker-end="url(#arrow-async)"/>
+<text x="544.0" y="940.0" class="topic" text-anchor="start">читает product.*, order.*</text>
+<path d="M762,752 L762,951" class="async" marker-end="url(#arrow-async)"/>
+<text x="772.0" y="940.0" class="topic" text-anchor="start">публикует product.*</text>
+<path d="M1014,752 L1014,951" class="async" marker-end="url(#arrow-async)"/>
+<path d="M1027,952 L1027,753" class="async" marker-end="url(#arrow-async)"/>
+<text x="1037.0" y="926.0" class="topic" text-anchor="start">публикует order.*</text>
+<text x="1037.0" y="940.0" class="topic" text-anchor="start">читает payment.*</text>
+<path d="M1266,752 L1266,951" class="async" marker-end="url(#arrow-async)"/>
+<text x="1276.0" y="940.0" class="topic" text-anchor="start">публикует payment.*</text>
+<path d="M506,216 L506,291" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="514.0" y="262.0" class="rel halo" text-anchor="start">использует</text>
+<text x="514.0" y="276.0" class="rel-tech halo" text-anchor="start">[HTTPS]</text>
+<path d="M974,216 L974,291" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="982.0" y="262.0" class="rel halo" text-anchor="start">использует</text>
+<text x="982.0" y="276.0" class="rel-tech halo" text-anchor="start">[HTTPS]</text>
+<path d="M1092,176 L1246.0,176" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="1169.5" y="160.0" class="rel halo-white" text-anchor="middle">оплачивает заказ</text>
+<text x="1169.5" y="194.0" class="rel-tech halo-white" text-anchor="middle">[HTTPS]</text>
+<path d="M506,388 L690,439" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="586.0" y="424.0" class="rel halo" text-anchor="end">вызывает API</text>
+<text x="586.0" y="438.0" class="rel-tech halo" text-anchor="end">[HTTPS/JSON]</text>
+<path d="M974,388 L802,439" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="906.0" y="424.0" class="rel halo" text-anchor="start">вызывает API</text>
+<text x="906.0" y="438.0" class="rel-tech halo" text-anchor="start">[HTTPS/JSON]</text>
+<path d="M746,536 L746,584" class="sync"/>
+<path d="M392.0,584 L1100.0,584" class="sync"/>
+<path d="M392.0,584 L392.0,639" class="sync" marker-end="url(#arrow-sync)"/>
+<path d="M620.0,584 L620.0,639" class="sync" marker-end="url(#arrow-sync)"/>
+<path d="M848.0,584 L848.0,639" class="sync" marker-end="url(#arrow-sync)"/>
+<path d="M1100.0,584 L1100.0,639" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="754.0" y="556.0" class="rel halo" text-anchor="start">маршрутизирует запросы</text>
+<text x="754.0" y="570.0" class="rel-tech halo" text-anchor="start">[HTTP/JSON]</text>
+<path d="M1000,664 L949,664" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="974.0" y="606.0" class="rel halo" text-anchor="middle">цены и резерв остатков</text>
+<text x="974.0" y="620.0" class="rel-tech halo" text-anchor="middle">[HTTP/JSON]</text>
+<path d="M1200,664 L1251,664" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="1226.0" y="606.0" class="rel halo" text-anchor="middle">платёж и возврат</text>
+<text x="1226.0" y="620.0" class="rel-tech halo" text-anchor="middle">[HTTP/JSON]</text>
+<path d="M1336.0,640 L1336.0,217" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="1328.0" y="430.0" class="rel halo" text-anchor="end">проводит оплату, возвраты</text>
+<text x="1328.0" y="444.0" class="rel halo" text-anchor="end">и выплаты продавцам</text>
+<text x="1328.0" y="458.0" class="rel-tech halo" text-anchor="end">[HTTPS]</text>
+<path d="M1368.0,216 L1368.0,639" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="1376.0" y="510.0" class="rel halo" text-anchor="start">результат</text>
+<text x="1376.0" y="524.0" class="rel halo" text-anchor="start">оплаты</text>
+<text x="1376.0" y="538.0" class="rel-tech halo" text-anchor="start">[HTTPS, вебхук]</text>
+<path d="M164.0,640 L164.0,217" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="172.0" y="462.0" class="rel halo" text-anchor="start">отправляет сообщения</text>
+<text x="172.0" y="476.0" class="rel-tech halo" text-anchor="start">[HTTPS, SMTP]</text>
+<text x="36.0" y="1100.0" class="legend-title" text-anchor="start">Обозначения</text>
+<circle cx="47" cy="1119" r="6" class="person"/>
+<rect x="36" y="1126" width="22" height="14" rx="5" class="person"/>
+<text x="68.0" y="1137.0" class="legend" text-anchor="start">человек</text>
+<rect x="142.75" y="1124" width="28" height="18" rx="5" class="container"/>
+<text x="180.8" y="1137.0" class="legend" text-anchor="start">приложение или сервис</text>
+<path d="M344.7421875,1127 L344.7421875,1139 A11,4 0 0 0 366.7421875,1139 L366.7421875,1127 A11,4 0 0 0 344.7421875,1127 Z" class="store"/>
+<ellipse cx="355.7421875" cy="1127" rx="11" ry="4" class="store"/>
+<text x="376.7" y="1137.0" class="legend" text-anchor="start">хранилище данных</text>
+<rect x="512.48828125" y="1124" width="28" height="18" rx="5" class="external"/>
+<text x="550.5" y="1137.0" class="legend" text-anchor="start">внешняя система</text>
+<rect x="675.484375" y="1124" width="28" height="18" rx="5" class="boundary"/>
+<text x="713.5" y="1137.0" class="legend" text-anchor="start">граница системы</text>
+<path d="M837.7265625,1133 L871.7265625,1133" class="sync" marker-end="url(#arrow-sync)"/>
+<text x="881.7" y="1137.0" class="legend" text-anchor="start">синхронный вызов</text>
+<path d="M1016.7265625,1133 L1050.7265625,1133" class="async" marker-end="url(#arrow-async)"/>
+<text x="1060.7" y="1137.0" class="legend" text-anchor="start">асинхронное событие через Kafka</text>
+<text x="36.0" y="1168.0" class="legend" text-anchor="start">Стрелка показывает направление вызова или движения события.</text>
+</svg>

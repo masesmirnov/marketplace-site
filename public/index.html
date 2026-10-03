@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Маркетплейс по доменам</title>
-<meta name="description" content="Архитектура маркетплейса: живая C4-диаграмма, заказ по шагам как сага, три варианта разбиения и настоящий catalog-service с health-check.">
+<meta name="description" content="Архитектура маркетплейса на живой карте: запросы и события в движении, заказ по шагам как сага, отказы сервисов, три варианта разбиения и настоящий catalog-service с health-check.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,16 +33,33 @@
   <symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M4 2.5 10.2 20l2.6-7.2L20 10.2z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14"/></symbol>  <symbol id="i-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M15.5 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/></symbol>
+  <symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5l1.7 4.8 4.8 1.7-4.8 1.7L10 16.5l-1.7-4.8L3.5 10l4.8-1.7z"/><path d="M18 14l.9 2.1 2.1.9-2.1.9L18 20l-.9-2.1-2.1-.9 2.1-.9z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.3V4.5a1 1 0 0 1 1-1h7.8l8.2 8.2a1 1 0 0 1 0 1.4l-7.4 7.4a1 1 0 0 1-1.4 0z"/><circle cx="8" cy="8" r="1.4"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3h13v18l-2.6-1.6-2.2 1.6-2.2-1.6-2.2 1.6-2.2-1.6-1.6 1.6z"/><path d="M9 8h6M9 12h6M9 16h3.5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.4-4.6"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5 5.6 4h12.8L20 9.5"/><path d="M4 9.5h16a2.7 2.7 0 0 1-5.3.6 2.7 2.7 0 0 1-5.4 0A2.7 2.7 0 0 1 4 9.5z"/><path d="M5.5 12.5V20h13v-7.5M10 20v-4.5h4V20"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 10.6a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.4-1L20.5 8H6.3"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.8 6.8 8.2 6.2 8.2-6.2"/></symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 12 4l8.5 5.5z"/><path d="M5.5 10v7.5M10 10v7.5M14 10v7.5M18.5 10v7.5M3.5 20.5h17"/></symbol>
+  <symbol id="i-stream" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5c3-2.6 6 2.6 9 0s6 2.6 9 0M3 12.5c3-2.6 6 2.6 9 0s6 2.6 9 0M3 17.5c3-2.6 6 2.6 9 0s6 2.6 9 0"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></symbol>
+  <symbol id="i-redis" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 2.661l.54.997-1.797.644 2.409.218.748 1.246.467-1.121 2.077-.208-1.61-.613.426-1.017-1.578.519zm6.905 2.077L13.76 6.182l3.292 1.298.353-.146 3.293-1.298zm-10.51.312a2.97 1.153 0 0 0-2.97 1.152 2.97 1.153 0 0 0 2.97 1.153 2.97 1.153 0 0 0 2.97-1.153 2.97 1.153 0 0 0-2.97-1.152zM24 6.805s-8.983 4.278-10.395 4.953c-1.226.561-1.901.561-3.261.094C8.318 11.022 0 7.241 0 7.241v1.038c0 .24.332.499.966.8 1.277.613 8.34 3.677 9.45 4.206 1.112.53 1.9.54 3.313-.197 1.412-.738 8.049-3.905 9.326-4.57.654-.342.945-.602.945-.84zm-10.042.602L8.39 8.26l3.884 1.61zM24 10.637s-8.983 4.279-10.395 4.954c-1.226.56-1.901.56-3.261.093C8.318 14.854 0 11.074 0 11.074v1.038c0 .238.332.498.966.8 1.277.612 8.34 3.676 9.45 4.205 1.112.53 1.9.54 3.313-.197 1.412-.737 8.049-3.905 9.326-4.57.654-.332.945-.602.945-.84zm0 3.842l-10.395 4.954c-1.226.56-1.901.56-3.261.094C8.318 18.696 0 14.916 0 14.916v1.038c0 .239.332.499.966.8 1.277.613 8.34 3.676 9.45 4.206 1.112.53 1.9.54 3.313-.198 1.412-.737 8.049-3.904 9.326-4.569.654-.343.945-.613.945-.841z"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
 </svg>
 
 <header class="bar">
   <div class="wrap bar-inner">
     <a class="brand" href="#top"><svg aria-hidden="true"><use href="#i-logo"/></svg><span>Маркетплейс по доменам</span></a>
     <nav class="nav" aria-label="Разделы">
-      <a href="#diagram">Схема</a>
-      <a href="#saga">Заказ</a>
-      <a href="#variants">Варианты</a>
-      <a href="#service">Сервис</a>
+      <a href="#map">Карта</a>
+      <a href="#code">Код</a>
       <a href="#board">Доска</a>
     </nav>
     <div class="bar-tools">
@@ -62,98 +79,100 @@
 
 <section class="chapter hero" id="top" data-anchor="hero">
   <div class="wrap">
-    <p class="eyebrow">ДЗ · архитектура маркетплейса</p>
     <h1>Маркетплейс <span class="mark">по доменам</span></h1>
-    <p class="hero-links"><a href="#diagram">Схема</a><a href="#saga">Заказ</a><a href="#variants">Варианты</a><a href="#service">Сервис</a></p>
+    <p class="lead">Шесть сервисов, у каждого своя база, события идут через Kafka. Всё на карте нажимается.</p>
   </div>
 </section>
 
-<section class="chapter" id="diagram" data-anchor="diagram">
-  <div class="wrap">
-    <div class="chapter-head">
-      <p class="eyebrow"><span class="tag">01</span>C4 · уровень 2 · Container</p>
-      <h2>Контейнеры</h2>
-      <div class="rule"><span class="yes">своя база у каждого сервиса</span><span class="no">общие базы</span></div>
-    </div>
-    <div class="toolbar">
-      <div class="segmented" id="filter" role="group" aria-label="Какие связи показать">
-        <button type="button" data-filter="all" aria-pressed="true">Все связи</button>
-        <button type="button" data-filter="sync" aria-pressed="false">Синхронные</button>
-        <button type="button" data-filter="async" aria-pressed="false">События</button>
+<section class="chapter stage-chapter" id="map" data-anchor="map">
+  <div class="wrap wide">
+    <div class="stage" id="stage" data-mode="overview">
+      <div class="stage-bar">
+        <div class="tabs" role="tablist" aria-label="Что показать на карте">
+          <button type="button" role="tab" data-mode="overview" aria-selected="true">Схема</button>
+          <button type="button" role="tab" data-mode="saga" aria-selected="false">Заказ</button>
+          <button type="button" role="tab" data-mode="whatif" aria-selected="false">Что если</button>
+          <button type="button" role="tab" data-mode="variants" aria-selected="false">Варианты</button>
+          <button type="button" role="tab" data-mode="code" aria-selected="false">Код</button>
+        </div>
+        <div class="stage-tools" data-for="overview">
+          <div class="segmented" id="filter" role="group" aria-label="Какие связи показать">
+            <button type="button" data-filter="all" aria-pressed="true">Все связи</button>
+            <button type="button" data-filter="sync" aria-pressed="false">Синхронные</button>
+            <button type="button" data-filter="async" aria-pressed="false">События</button>
+          </div>
+          <button class="chip-button" id="labels-toggle" type="button" aria-pressed="false" title="Подписи у всех связей, как на C4-диаграмме">Подписи</button>
+          <button class="chip-button" id="traffic-toggle" type="button" aria-pressed="true" title="Остановить или запустить запросы на карте"><svg aria-hidden="true"><use href="#i-pulse"/></svg><span class="label-text">Трафик</span></button>
+        </div>
+        <div class="stage-tools" data-for="saga" id="saga-tools"></div>
+        <div class="stage-tools" data-for="whatif">
+          <label class="speed load" title="Сколько покупателей одновременно смотрят ленту и карточки">
+            <span>наплыв покупателей</span>
+            <input type="range" id="load" min="1" max="4" step="1" value="1" aria-label="Наплыв покупателей">
+            <output id="load-value">×1</output>
+          </label>
+          <button class="chip-button" id="revive" type="button"><svg aria-hidden="true"><use href="#i-reset"/></svg><span>Поднять всё</span></button>
+        </div>
+        <div class="stage-tools" data-for="variants">
+          <div class="segmented" id="variant-switch" role="group" aria-label="Вариант разбиения"></div>
+        </div>
+        <div class="stage-tools" data-for="code">
+          <a class="chip-button" href="https://github.com/masesmirnov/marketplace-architecture" target="_blank" rel="noopener">репозиторий на GitHub</a>
+        </div>
       </div>
-      <span class="hint">нажмите на контейнер — покажу его данные и связи</span>
-    </div>
-    <div class="diagram-card" id="c4"></div>
-    <div class="card details" id="details" aria-live="polite"></div>
-  </div>
-</section>
-
-<section class="chapter" id="saga" data-anchor="saga">
-  <div class="wrap">
-    <div class="chapter-head">
-      <p class="eyebrow"><span class="tag">02</span>order-service ведёт сагу</p>
-      <h2>Заказ по шагам</h2>
-      <div class="rule"><span class="yes">статусы заказа</span><span class="yes">компенсации</span><span class="no">общая транзакция</span></div>
-    </div>
-    <div class="lab" id="saga-lab">
-      <div class="lab-head"></div>
-      <div class="lab-stage" id="saga-diagram"></div>
-      <div class="caption"><span class="t"></span><span class="what" aria-live="polite"></span></div>
-      <div class="verdict" role="status"></div>
-      <div class="state"></div>
-    </div>
-  </div>
-</section>
-
-<section class="chapter" id="variants" data-anchor="variants">
-  <div class="wrap">
-    <div class="chapter-head">
-      <p class="eyebrow"><span class="tag">03</span>одна система, три разбиения</p>
-      <h2>Варианты</h2>
-    </div>
-    <div class="toolbar">
-      <div class="segmented" id="variant-switch" role="group" aria-label="Вариант разбиения"></div>
-      <span class="hint" id="variant-short"></span>
-    </div>
-    <div class="diagram-card" id="variants-diagram"></div>
-    <div class="tradeoffs">
-      <div class="card plus"><h3>Плюсы</h3><ul id="variant-pros"></ul></div>
-      <div class="card minus"><h3>Минусы</h3><ul id="variant-cons"></ul></div>
-    </div>
-    <p class="choice" id="variant-choice"></p>
-  </div>
-</section>
-
-<section class="chapter" id="service" data-anchor="service">
-  <div class="wrap">
-    <div class="chapter-head">
-      <p class="eyebrow"><span class="tag">04</span>catalog-service · GET /health</p>
-      <h2>Живой сервис</h2>
-      <div class="rule"><span class="yes">200 OK</span><span class="no">бизнес-логика</span></div>
-    </div>
-    <div class="health">
-      <div class="card" id="health">
-        <div class="probe"><span class="dot"></span><span class="probe-code">проверяю…</span></div>
-        <div class="probe-request">GET /health</div>
-        <div class="probe-body">—</div>
-        <div class="probe-meta"><span data-health="latency">—</span><span data-health="age"></span></div>
-        <div class="spark" aria-hidden="true"></div>
+      <div class="viewport" id="viewport">
+        <div class="map-host" id="map-host"></div>
+        <div class="zoom" role="group" aria-label="Масштаб карты">
+          <button class="icon-button" type="button" data-zoom="in" aria-label="Приблизить"><svg aria-hidden="true"><use href="#i-plus"/></svg></button>
+          <button class="icon-button" type="button" data-zoom="out" aria-label="Отдалить"><svg aria-hidden="true"><use href="#i-minus"/></svg></button>        </div>
+        <aside class="sheet" id="sheet" aria-live="polite" aria-label="Подробности о выбранном контейнере"></aside>
+        <div class="map-caption" id="map-caption" aria-live="polite"></div>
       </div>
-      <div class="card code-card">
-        <div class="code-title"><b>services/catalog/main.py</b><span>тот же файл работает на сервере</span></div>
-        <div id="catalog-code"></div>
+      <div class="codebook" id="codebook" data-for="code">
+        <nav class="files" aria-label="Файлы репозитория">
+          <p class="files-title">marketplace-architecture</p>
+          <div class="files-list"></div>
+          <a class="files-readme" href="https://github.com/masesmirnov/marketplace-architecture#readme" target="_blank" rel="noopener">README.md на GitHub</a>
+        </nav>
+        <div class="viewer">
+          <div class="viewer-head"><span class="viewer-path"></span><a class="viewer-link" target="_blank" rel="noopener">на GitHub</a></div>
+          <p class="viewer-about"></p>
+          <div class="viewer-body"></div>
+        </div>
+        <div class="code-side">
+          <div class="side-card" id="health">
+            <p class="side-title">catalog-service на сервере</p>
+            <div class="probe"><span class="dot"></span><span class="probe-code">проверяю…</span></div>
+            <div class="probe-request">GET /health</div>
+            <div class="probe-body">—</div>
+            <div class="probe-meta"><span data-health="latency">—</span><span data-health="age"></span></div>
+            <div class="spark" aria-hidden="true"></div>
+          </div>
+          <div class="side-card run">
+            <p class="side-title">Запуск у себя</p>
+            <code>docker compose up --build --wait</code>
+            <code>curl -i http://localhost:8000/health</code>
+            <p class="side-note">в PowerShell вместо curl пишите curl.exe</p>
+          </div>
+        </div>
+      </div>
+      <div class="stage-foot">
+        <div class="foot" data-for="overview" id="foot-overview"></div>
+        <div class="foot" data-for="saga" id="foot-saga"></div>
+        <div class="foot" data-for="whatif" id="foot-whatif"></div>
+        <div class="foot" data-for="variants" id="foot-variants"></div>
+        <div class="foot" data-for="code" id="foot-code"><p class="foot-note">Код есть только у <code>catalog-service</code>: по заданию поднят один сервис.</p></div>
       </div>
     </div>
-    <p class="fine">локально: docker compose up --build --wait, затем curl -i http://localhost:8000/health</p>
   </div>
 </section>
 
 <section class="chapter" id="board-section" data-cursor="board-area">
   <div class="wrap">
     <div class="chapter-head">
-      <p class="eyebrow"><span class="tag">05</span>видят все, кто открыл ссылку</p>
       <h2 id="board">Доска</h2>
     </div>
+    <p class="chapter-lead">Рисуют все, кто открыл ссылку.</p>
     <div class="board-wrap">
       <div class="board" data-anchor="board"></div>
     </div>

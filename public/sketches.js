@@ -44,13 +44,6 @@ function coin(pen, cx, cy, r) {
   pen.line(7, 2.2, [[cx - 8 * s, cy + 5 * s], [cx + 4 * s, cy + 5 * s]], { wobble: 0.1 });
 }
 
-function cylinder(pen, color, cx, top, rx, height) {
-  pen.line(color, 2.2, arc(cx, top, rx, rx * 0.3, 0, 2 * Math.PI, 28), { closed: true, wobble: 0.2 });
-  pen.line(color, 2.2, [[cx - rx, top], [cx - rx, top + height]], { wobble: 0.2 });
-  pen.line(color, 2.2, [[cx + rx, top], [cx + rx, top + height]], { wobble: 0.2 });
-  pen.line(color, 2.2, arc(cx, top + height, rx, rx * 0.3, 0, Math.PI, 16), { wobble: 0.2 });
-}
-
 function shop(pen) {
   pen.line(2, 2.4, [[44, 62], [236, 62], [230, 86], [50, 86], [44, 62]], { closed: true, wobble: 0.5 });
   [82, 118, 154, 190].forEach(x => pen.line(2, 2, [[x, 62], [x + 1, 86]], { wobble: 0.2 }));
@@ -119,55 +112,6 @@ export const SKETCHES = {
       sparkle(pen, 280, 60, 11);
       sparkle(pen, 500, 58, 9);
       sparkle(pen, 342, 262, 7);
-    }
-  },
-  blocks: {
-    size: ICON,
-    paint(pen) {
-      pen.line(0, 2.4, roundRect(8, 12, 56, 34, 6), { closed: true });
-      pen.line(1, 2.4, roundRect(94, 12, 56, 34, 6), { closed: true });
-      pen.line(0, 2.2, [[68, 29], [88, 29]], { wobble: 0.2 });
-      arrowHead(pen, 0, 2.2, [90, 29], [80, 29], 7);
-      pen.line(0, 2, [[122, 48], [122, 62]], { wobble: 0.1 });
-      cylinder(pen, 3, 122, 70, 20, 24);
-      dashed(pen, 5, [[36, 48], [36, 96]], 8, 6);
-      pen.line(5, 2.4, wave(8, 88, 104, 2, 26), { wobble: 0.3 });
-      sparkle(pen, 74, 78, 7);
-    }
-  },
-  receipt: {
-    size: ICON,
-    paint(pen) {
-      const bottom = Array.from({ length: 10 }, (_, index) => [116 - index * 8, index % 2 ? 96 : 104]);
-      pen.line(0, 2.4, [[44, 8], [116, 8], [116, 104], ...bottom, [44, 104], [44, 8]], { closed: true, wobble: 0.4 });
-      pen.line(0, 1.8, wave(54, 104, 26, 1, 16), { wobble: 0.2 });
-      pen.line(0, 1.8, wave(54, 96, 40, 1, 16), { wobble: 0.2 });
-      pen.line(0, 1.8, wave(54, 100, 54, 1, 16), { wobble: 0.2 });
-      pen.line(3, 2.8, [[58, 74], [70, 86], [92, 62]], { wobble: 0.3 });
-      coin(pen, 132, 92, 16);
-      sparkle(pen, 22, 24, 8);
-    }
-  },
-  fork: {
-    size: ICON,
-    paint(pen) {
-      pen.dot(0, 9, 18, 60);
-      pen.line(0, 2, bezier([22, 60], [66, 60], [86, 100], [136, 100], 24), { wobble: 0.4 });
-      arrowHead(pen, 0, 2, [140, 100], [128, 100], 8);
-      pen.line(0, 2, bezier([22, 60], [70, 60], [90, 60], [136, 60], 24), { wobble: 0.4 });
-      arrowHead(pen, 0, 2, [140, 60], [128, 60], 8);
-      pen.line(3, 2.8, bezier([22, 60], [66, 60], [86, 22], [136, 22], 24), { wobble: 0.4 });
-      arrowHead(pen, 3, 2.8, [140, 22], [128, 22], 9);
-      pen.line(3, 2.6, [[108, 4], [115, 11], [128, 0]], { wobble: 0.2 });
-      sparkle(pen, 150, 108, 7);
-    }
-  },
-  pulse: {
-    size: ICON,
-    paint(pen) {
-      pen.line(3, 2.6, [[6, 72], [44, 72], [54, 52], [64, 94], [76, 28], [88, 86], [96, 72], [154, 72]], { wobble: 0.2, step: 2.5 });
-      pen.line(4, 2.2, heart(132, 34, 22), { closed: true, wobble: 0.3, step: 2 });
-      sparkle(pen, 24, 26, 7);
     }
   },
   pencil: { size: ICON, paint: pencil }
