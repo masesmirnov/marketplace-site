@@ -14,6 +14,7 @@ const stage = new Stage(document.getElementById('stage'), share);
 
 board = startBoard({
   lab: state => stage.lab(state),
+  view: state => stage.view(state),
   restore: data => stage.restore(data)
 });
 

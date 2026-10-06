@@ -42,6 +42,17 @@ const LABS = new Map([
   ['saga', new Set(['paid', 'declined', 'timeout', 'refund'])],
   ['variants', new Set(['domain', 'coarse', 'monolith'])]
 ]);
+const VIEW_MODES = new Set(['overview', 'saga', 'whatif', 'variants', 'code']);
+const VIEW_FILTERS = new Set(['all', 'sync', 'async']);
+const VIEW_FILES = new Set([
+  'services/catalog/main.py',
+  'services/catalog/requirements.txt',
+  'services/catalog/Dockerfile',
+  'docker-compose.yml',
+  '.gitignore',
+  'docs/c4-container.svg'
+]);
+const VIEW_DOWN_LIMIT = 8;
 
 function catalogUrl(value) {
   if (!value) return '';
@@ -140,6 +151,10 @@ function validId(value) {
 
 function validAnchor(value) {
   return typeof value === 'string' && /^[a-z0-9-]{1,32}$/.test(value);
+}
+
+function validNode(value) {
+  return typeof value === 'string' && /^[A-Za-z]{1,24}$/.test(value);
 }
 
 function clip(value, limit) {
@@ -430,6 +445,31 @@ function apply(room, peer, op) {
       if (!Number.isFinite(speed) || speed < 0 || speed > 1) return null;
       const state = { t: 'lab', lab: op.lab, mode: op.mode, scenario: op.scenario, seed: op.seed, at, speed: Math.round(speed * 100) / 100, seq: ++room.seq };
       room.labs[op.lab] = { ...state, stamp: Date.now() };
+      return state;
+    }
+    case 'view': {
+      const down = Array.isArray(op.down) ? Array.from(new Set(op.down)) : null;
+      if (!VIEW_MODES.has(op.mode) || !VIEW_FILTERS.has(op.filter) || !down || down.length > VIEW_DOWN_LIMIT || !down.every(validNode)) return null;
+      if (typeof op.labels !== 'boolean' || typeof op.traffic !== 'boolean' || typeof op.experiments?.load !== 'boolean') return null;
+      if ((op.selected !== null && !validNode(op.selected)) || (op.guide !== null && !validNode(op.guide))) return null;
+      if (!Number.isInteger(op.load) || op.load < 1 || op.load > 4 || !Number.isInteger(op.run) || op.run < 0 || op.run >= 2 ** 31) return null;
+      if (!VIEW_FILES.has(op.file)) return null;
+      const state = {
+        t: 'view',
+        mode: op.mode,
+        filter: op.filter,
+        labels: op.labels,
+        traffic: op.traffic,
+        selected: op.selected,
+        down,
+        load: op.load,
+        experiments: { load: op.experiments.load },
+        file: op.file,
+        guide: op.guide,
+        run: op.run,
+        seq: ++room.seq
+      };
+      room.labs.view = { ...state, stamp: Date.now() };
       return state;
     }
     case 'n':

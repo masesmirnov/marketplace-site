@@ -102,6 +102,8 @@ export class Stage {
     this.share = share;
     this.mode = 'overview';
     this.variant = 'domain';
+    this.filter = 'all';
+    this.labels = false;
     this.trafficOn = true;
     this.visible = false;
     this.revealed = false;
@@ -110,6 +112,8 @@ export class Stage {
     this.load = 1;
     this.guiding = null;
     this.guideEdges = new Set();
+    this.run = 0;
+    this.shared = '';
     this.viewport = root.querySelector('#viewport');
     this.sheet = root.querySelector('#sheet');
     this.caption = root.querySelector('#map-caption');
@@ -117,6 +121,7 @@ export class Stage {
     this.map = new LiveMap(root.querySelector('#map-host'), {
       onSelect: id => this.renderSheet(id),
       onActivate: id => this.activate(id),
+      onPick: () => this.publish(),
       onView: zoomed => this.viewport.classList.toggle('zoomed', zoomed),
       onRevealed: () => {
         this.revealed = true;
@@ -131,7 +136,7 @@ export class Stage {
       state: this.sagaParts.state,
       verdict: this.sagaParts.verdict
     }, this.map, share);
-    this.codebook = new Codebook(root.querySelector('#codebook'));
+    this.codebook = new Codebook(root.querySelector('#codebook'), () => this.publish());
     this.bindTools();
     this.applyVariant('domain');
     this.updateInset();
@@ -142,14 +147,15 @@ export class Stage {
       this.syncTraffic();
     }, { threshold: 0.35 }).observe(this.viewport);
     document.addEventListener('visibilitychange', () => this.syncTraffic());
-    window.addEventListener('hashchange', () => this.follow());
+    window.addEventListener('hashchange', () => this.follow(true));
     this.follow();
   }
 
-  follow() {
+  follow(share = false) {
     const mode = HASHES[location.hash];
     if (!mode) return;
     this.setMode(mode);
+    if (share) this.publish();
     requestAnimationFrame(() => this.root.scrollIntoView({ block: 'start' }));
   }
 
@@ -159,46 +165,50 @@ export class Stage {
 
   bindTools() {
     this.tabs = Array.from(this.root.querySelectorAll('.tabs [data-mode]'));
-    for (const tab of this.tabs) tab.addEventListener('click', () => this.setMode(tab.dataset.mode));
+    for (const tab of this.tabs) {
+      tab.addEventListener('click', () => {
+        this.setMode(tab.dataset.mode);
+        this.publish();
+      });
+    }
     this.root.querySelector('.tabs').addEventListener('keydown', event => {
       if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
       const index = MODES.indexOf(this.mode) + (event.key === 'ArrowRight' ? 1 : -1);
       const next = MODES[(index + MODES.length) % MODES.length];
       this.setMode(next);
+      this.publish();
       this.tabs.find(tab => tab.dataset.mode === next).focus();
     });
 
-    const filters = Array.from(this.root.querySelectorAll('#filter [data-filter]'));
-    for (const button of filters) {
+    this.filters = Array.from(this.root.querySelectorAll('#filter [data-filter]'));
+    for (const button of this.filters) {
       button.addEventListener('click', () => {
-        this.map.setFilter(button.dataset.filter);
-        filters.forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+        this.setFilter(button.dataset.filter);
+        this.publish();
       });
     }
-    this.map.setFilter('all');
-    const labels = this.root.querySelector('#labels-toggle');
-    labels.addEventListener('click', () => {
-      const on = labels.getAttribute('aria-pressed') !== 'true';
-      labels.setAttribute('aria-pressed', String(on));
-      this.map.setLabels(on);
+    this.setFilter('all');
+    this.labelsToggle = this.root.querySelector('#labels-toggle');
+    this.labelsToggle.addEventListener('click', () => {
+      this.setLabels(!this.labels);
+      this.publish();
     });
-    const traffic = this.root.querySelector('#traffic-toggle');
-    traffic.addEventListener('click', () => {
-      this.trafficOn = traffic.getAttribute('aria-pressed') !== 'true';
-      traffic.setAttribute('aria-pressed', String(this.trafficOn));
-      this.syncTraffic();
+    this.trafficToggle = this.root.querySelector('#traffic-toggle');
+    this.trafficToggle.addEventListener('click', () => {
+      this.setTraffic(!this.trafficOn);
+      this.publish();
     });
 
     this.loadInput = this.root.querySelector('#load');
     this.loadValue = this.root.querySelector('#load-value');
     this.loadInput.addEventListener('input', () => {
-      this.load = Number(this.loadInput.value);
-      this.loadValue.textContent = `×${this.load}`;
-      this.applyLoad();
+      this.setLoad(Number(this.loadInput.value));
+      this.publish();
     });
     this.root.querySelector('#revive').addEventListener('click', () => {
       this.down.clear();
       this.applyDown();
+      this.publish();
     });
 
     this.variantButtons = VARIANT_ORDER.map(id => {
@@ -263,6 +273,7 @@ export class Stage {
         this.experiments[id] = !this.experiments[id];
         button.setAttribute('aria-pressed', String(this.experiments[id]));
         this.applyExperiments();
+        this.publish();
       });
       experiments.append(button);
       return [id, button];
@@ -330,6 +341,8 @@ export class Stage {
       tab.tabIndex = selected ? 0 : -1;
     }
     this.endGuide();
+    clearTimeout(this.captionTimer);
+    this.caption.classList.remove('shown');
     this.map.select(null);
     this.map.setDown([]);
     this.map.setStacks({});
@@ -355,6 +368,31 @@ export class Stage {
     const allowed = this.mode === 'overview' ? this.trafficOn : this.mode === 'whatif' || this.mode === 'variants';
     if (allowed && this.revealed && this.visible && document.visibilityState === 'visible' && !calm.matches) this.traffic.start();
     else this.traffic.stop();
+  }
+
+  setFilter(filter) {
+    this.filter = filter;
+    this.map.setFilter(filter);
+    for (const button of this.filters) button.setAttribute('aria-pressed', String(button.dataset.filter === filter));
+  }
+
+  setLabels(on) {
+    this.labels = on;
+    this.labelsToggle.setAttribute('aria-pressed', String(on));
+    this.map.setLabels(on);
+  }
+
+  setTraffic(on) {
+    this.trafficOn = on;
+    this.trafficToggle.setAttribute('aria-pressed', String(on));
+    this.syncTraffic();
+  }
+
+  setLoad(load) {
+    this.load = load;
+    this.loadInput.value = String(load);
+    this.loadValue.textContent = `×${load}`;
+    this.applyLoad();
   }
 
   activate(id) {
@@ -526,7 +564,10 @@ export class Stage {
     const button = element('button', 'ref');
     button.type = 'button';
     button.textContent = NODES[id].domain || NODES[id].name;
-    button.addEventListener('click', () => this.map.select(id));
+    button.addEventListener('click', () => {
+      this.map.select(id);
+      this.publish();
+    });
     return button;
   }
 
@@ -555,7 +596,10 @@ export class Stage {
     const close = element('button', 'icon-button sheet-close', ICON('x'));
     close.type = 'button';
     close.setAttribute('aria-label', 'Закрыть');
-    close.addEventListener('click', () => this.map.select(null));
+    close.addEventListener('click', () => {
+      this.map.select(null);
+      this.publish();
+    });
     head.append(glyph, name, close, kind);
     const nodes = [head];
 
@@ -572,6 +616,7 @@ export class Stage {
         button.addEventListener('click', () => {
           button.classList.add('running');
           this.guide(action);
+          this.publish(action.id);
         });
         actions.append(button);
       }
@@ -586,7 +631,10 @@ export class Stage {
           const button = element('button', 'action');
           button.type = 'button';
           button.append(document.createTextNode(label), element('span', '', 'открыть'));
-          button.addEventListener('click', () => this.openCode(path));
+          button.addEventListener('click', () => {
+            this.openCode(path);
+            this.publish();
+          });
           actions.append(button);
         }
         nodes.push(actions);
@@ -629,10 +677,66 @@ export class Stage {
     this.sheet.scrollTop = 0;
   }
 
+  snapshot() {
+    return {
+      t: 'view',
+      mode: this.mode,
+      filter: this.filter,
+      labels: this.labels,
+      traffic: this.trafficOn,
+      selected: this.map.selected,
+      down: Array.from(this.down),
+      load: this.load,
+      experiments: { load: this.experiments.load },
+      file: this.codebook.current,
+      run: this.run
+    };
+  }
+
+  publish(guide = null) {
+    if (guide) this.run += 1;
+    const state = this.snapshot();
+    const key = JSON.stringify(state);
+    if (!guide && key === this.shared) return;
+    this.shared = key;
+    this.share({ ...state, guide });
+  }
+
+  view(state, replay = true) {
+    this.setMode(state.mode);
+    if (state.filter !== this.filter) this.setFilter(state.filter);
+    if (state.labels !== this.labels) this.setLabels(state.labels);
+    if (state.traffic !== this.trafficOn) this.setTraffic(state.traffic);
+    if (this.mode === 'whatif' && state.load !== this.load) this.setLoad(state.load);
+    if (this.mode === 'whatif' || this.mode === 'variants') {
+      this.down = new Set(state.down.filter(id => this.droppable(id)));
+      this.applyDown();
+    }
+    if (this.mode === 'variants' && state.experiments.load !== this.experiments.load) {
+      this.experiments = { load: state.experiments.load };
+      for (const [id, button] of this.experimentButtons) button.setAttribute('aria-pressed', String(this.experiments[id]));
+      this.applyExperiments();
+    }
+    if (this.mode === 'code' && state.file !== this.codebook.current) this.codebook.open(state.file);
+    if (state.selected !== this.map.selected) {
+      if (this.mode === 'overview' && ACTIONS[state.selected]) {
+        this.map.select(state.selected, { camera: false });
+        this.map.fitBeside();
+      } else {
+        this.map.select(state.selected);
+      }
+    }
+    const action = replay && state.run !== this.run && ACTIONS[this.map.selected]?.find(item => item.id === state.guide);
+    this.run = state.run;
+    if (action) this.guide(action);
+    this.shared = JSON.stringify(this.snapshot());
+  }
+
   restore(data) {
     const labs = data.labs || {};
     this.saga.restore(labs.saga || null, data.now);
     this.applyVariant(labs.variants ? labs.variants.scenario : 'domain');
+    if (labs.view) this.view(labs.view, false);
   }
 
   lab(state) {

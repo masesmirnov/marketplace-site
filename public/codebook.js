@@ -66,7 +66,7 @@ function paint(line, kind) {
 }
 
 export class Codebook {
-  constructor(root) {
+  constructor(root, onPick) {
     this.root = root;
     this.cache = new Map();
     this.current = null;
@@ -84,7 +84,10 @@ export class Codebook {
       const folder = element('span', 'file-dir');
       folder.textContent = parts.length ? parts.join('/') + '/' : '';
       button.append(folder, label);
-      button.addEventListener('click', () => this.open(file.path));
+      button.addEventListener('click', () => {
+        this.open(file.path);
+        onPick();
+      });
       this.list.append(button);
       return [file.path, button];
     }));

@@ -392,6 +392,7 @@ export class LiveMap {
       const node = event.target.closest('[data-node]');
       if (node && !node.classList.contains('absent')) this.activate(node.dataset.node);
       else if (!event.target.closest('.zoom, .sheet')) this.select(null);
+      if (this.hooks.onPick) this.hooks.onPick();
     };
     host.addEventListener('pointerup', release);
     host.addEventListener('pointercancel', release);
@@ -405,6 +406,7 @@ export class LiveMap {
     host.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
         this.select(null);
+        if (this.hooks.onPick) this.hooks.onPick();
         return;
       }
       if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -412,6 +414,7 @@ export class LiveMap {
       if (!node) return;
       event.preventDefault();
       this.activate(node.dataset.node);
+      if (this.hooks.onPick) this.hooks.onPick();
     });
     host.addEventListener('wheel', event => {
       if (!event.ctrlKey && !event.metaKey) return;

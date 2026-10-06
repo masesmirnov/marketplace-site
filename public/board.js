@@ -346,7 +346,7 @@ class Board {
   }
 
   send(op) {
-    if (op.t === 'lab' || op.t === 'checker') {
+    if (op.t === 'lab' || op.t === 'checker' || op.t === 'view') {
       const key = op.lab || op.t;
       this.pending.set(key, (this.pending.get(key) || 0) + 1);
     }
@@ -511,6 +511,9 @@ class Board {
           break;
         case 'checker':
           if (this.newer(op, from)) this.hooks.checker(op);
+          break;
+        case 'view':
+          if (this.newer(op, from)) this.hooks.view(op);
           break;
         default:
           break;
