@@ -357,12 +357,8 @@
 .choice b { color: var(--ink); font-weight: 600; }
 
 .probe { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
-.probe .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--faint); flex: none; }
 .probe.ok { color: var(--good-ink); }
-.probe.ok .dot { background: var(--good); animation: beat 2s ease-out infinite; }
 .probe.down { color: var(--bad-ink); }
-.probe.down .dot { background: var(--bad); }
-@keyframes beat { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 10px transparent; } }
 .probe-request { margin-top: 10px; color: var(--muted); font-family: var(--mono); font-size: 12.5px; }
 .probe-body { margin-top: 4px; font-family: var(--mono); font-size: 13.5px; overflow-wrap: anywhere; }
 .probe-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 10px; color: var(--faint); font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
