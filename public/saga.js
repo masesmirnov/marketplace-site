@@ -18,7 +18,7 @@ function checkout() {
       tone: USER,
       edges: ['buyer-storefront', 'storefront-gateway', 'gateway-order', 'order-orderDb'],
       who: 'покупатель',
-      say: 'оформляет заказ, order-service пишет его в свою базу',
+      say: `заказывает ${COUNT} кружки по ${rub(PRICE)}, order-service пишет заказ в свою базу`,
       apply: world => world.order.push('создан')
     },
     {
@@ -132,7 +132,7 @@ const SCENARIOS = {
         tone: EVENT,
         edges: ['kafka-feed', 'feed-feedStore'],
         who: 'feed-service',
-        say: 'учитывает покупку в интересах',
+        say: 'учитывает покупку: кружки из посуды, интерес к ней растёт',
         apply: world => {
           world.feed = 'Посуда: интерес +1';
         }
