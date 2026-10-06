@@ -750,8 +750,17 @@ export class LiveMap {
       this.stepMark.classList.add('empty');
       return;
     }
+    const plate = this.labels.get(id)?.plate.getBBox();
+    const taken = Array.from(this.items.values()).filter(item => !item.node.classList.contains('absent')).map(item => item.geom(this.layout));
+    if (plate) taken.push({ x: plate.x, y: plate.y, w: plate.width, h: plate.height });
+    const free = ([x, y]) => taken.every(box => !box || x + 13 < box.x || x - 13 > box.x + box.w || y + 13 < box.y || y - 13 > box.y + box.h);
     const [x, y, angle] = pointAt(track, track.length * 0.5);
-    this.stepMark.setAttribute('transform', `translate(${round(x - Math.sin(angle) * 16)} ${round(y + Math.cos(angle) * 16)})`);
+    let spot = null;
+    for (let side = 16; side <= 80 && !spot; side += 4) {
+      spot = [side, -side].map(offset => [x - Math.sin(angle) * offset, y + Math.cos(angle) * offset]).find(free);
+    }
+    const [left, top] = spot || [x - Math.sin(angle) * 16, y + Math.cos(angle) * 16];
+    this.stepMark.setAttribute('transform', `translate(${round(left)} ${round(top)})`);
     this.stepText.textContent = String(index);
     this.stepMark.classList.remove('empty');
   }
