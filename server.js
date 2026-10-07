@@ -650,7 +650,7 @@ function evictIdleRoom() {
 function prune() {
   const now = Date.now();
   for (const [key, room] of rooms) {
-    if (!room.peers.size && now - room.idleSince > ROOM_TTL) rooms.delete(key);
+    if (!room.peers.size && room.code !== 'main' && now - room.idleSince > ROOM_TTL) rooms.delete(key);
   }
   for (const [counters, window] of [[opens, OPEN_WINDOW], [addressOps, OPS_WINDOW], [peerOps, OPS_WINDOW], [healthHits, HEALTH_WINDOW]]) {
     for (const [key, entry] of counters) {
